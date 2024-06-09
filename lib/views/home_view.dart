@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:custom_widgets/widgets/buttons/only_corner_button.dart';
 import 'package:custom_widgets/widgets/column/custom_column_widget.dart';
 import 'package:custom_widgets/widgets/divider/custom_divider_widget.dart';
 
@@ -34,12 +35,18 @@ class _HomeViewState extends State<HomeView> {
             lineWidth: MediaQuery.of(context).size.width * 0.5,
             circleBorderColor: Colors.black,
           ),
-          children: List.generate(
-            50,
-            (index) => Center(
-              child: Text(index.toString())
-            )
-          )
+          children: [
+
+            Center(
+              child: OnlyCornerButton(
+                child: Text('Login'),
+                onTap: () {
+
+                },
+              ),
+            ),
+
+          ]
         ),
       )
     );
