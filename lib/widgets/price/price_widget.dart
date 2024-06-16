@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 
 class PriceWidget extends StatelessWidget {
 
-  double price;
-  double? discountedPrice;
-  String currency;
+  final double price;
+  final double? discountedPrice;
+  final String currency;
 
-  PriceWidget({
+  const PriceWidget({
     super.key,
     required this.price,
     this.discountedPrice,
