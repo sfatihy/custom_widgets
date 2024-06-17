@@ -11,7 +11,8 @@ class PriceWidget extends StatelessWidget {
     required this.price,
     this.discountedPrice,
     required this.currency
-  }) : assert(discountedPrice == null || discountedPrice < price, 'The discountedPrice field cannot be more greater than the price field');
+  }) : assert(price >= 0),
+       assert(discountedPrice == null || discountedPrice < price, 'The discountedPrice field cannot be more greater than the price field');
 
   String priceModifier(double price) {
     String priceStr = price.toStringAsFixed(2);
