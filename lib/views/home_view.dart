@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:custom_widgets/widgets/animated_price/animated_price_widget.dart';
 import 'package:custom_widgets/widgets/animated_price_wheel/animated_price_wheel_widget.dart';
 import 'package:custom_widgets/widgets/buttons/only_corner_button.dart';
+import 'package:custom_widgets/widgets/buttons/colorful_button.dart';
 import 'package:custom_widgets/widgets/column/custom_column_widget.dart';
 import 'package:custom_widgets/widgets/divider/custom_divider_widget.dart';
 import 'package:custom_widgets/widgets/price/price_widget.dart';
@@ -41,7 +42,32 @@ class _HomeViewState extends State<HomeView> {
           children: [
 
             OnlyCornerButton(
-              child: Text('Login'),
+              child: const Text('Login'),
+              onTap: () {
+
+              },
+            ),
+
+            ColorfulButton(
+              child: const Text('Login'),
+              onTap: () {
+
+              },
+            ),
+
+            ColorfulButton(
+              gradient: const LinearGradient(
+                colors: [
+                  Color(0xFF8AECFF),
+                  Colors.white30,
+                  Color(0xFF8AECFF),
+                ],
+                stops: [0.2,0.5,0.8],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              overlayColor: MaterialStateProperty.all(const Color(0xFF8AECFF)),
+              child: const Text('Login'),
               onTap: () {
 
               },
