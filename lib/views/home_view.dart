@@ -6,6 +6,7 @@ import 'package:custom_widgets/widgets/buttons/only_corner_button.dart';
 import 'package:custom_widgets/widgets/buttons/colorful_button.dart';
 import 'package:custom_widgets/widgets/column/custom_column_widget.dart';
 import 'package:custom_widgets/widgets/divider/custom_divider_widget.dart';
+import 'package:custom_widgets/widgets/glass_morphism/glass_morphism_widget.dart';
 import 'package:custom_widgets/widgets/price/price_widget.dart';
 
 class HomeView extends StatefulWidget {
@@ -88,6 +89,8 @@ class _HomeViewState extends State<HomeView> {
               price: 10119.99,
               currency: '\u0024',
             ),
+
+            const GlassMorphismWidget(),
 
           ]
         ),
