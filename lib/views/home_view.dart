@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'package:custom_widgets/views/favorite_view.dart';
+import 'package:custom_widgets/views/qr_view.dart';
+
 import 'package:custom_widgets/widgets/animated_price/animated_price_widget.dart';
 import 'package:custom_widgets/widgets/animated_price_wheel/animated_price_wheel_widget.dart';
 import 'package:custom_widgets/widgets/buttons/only_corner_button.dart';
@@ -91,6 +94,32 @@ class _HomeViewState extends State<HomeView> {
             ),
 
             const GlassMorphismWidget(),
+
+            OnlyCornerButton(
+              child: const Row(
+                children: [
+                  Text('Circle FAB'),
+                  SizedBox(width: 4),
+                  Icon(Icons.arrow_forward_outlined)
+                ],
+              ),
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (_) => const QrView()));
+              },
+            ),
+
+            OnlyCornerButton(
+              child: const Row(
+                children: [
+                  Text('Favorite FAB'),
+                  SizedBox(width: 4),
+                  Icon(Icons.arrow_forward_outlined)
+                ],
+              ),
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (_) => const FavoriteView()));
+              },
+            ),
 
           ]
         ),
