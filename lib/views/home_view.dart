@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:custom_widgets/views/calendar_view.dart';
 import 'package:custom_widgets/views/favorite_view.dart';
 import 'package:custom_widgets/views/qr_view.dart';
 
@@ -118,6 +119,19 @@ class _HomeViewState extends State<HomeView> {
               ),
               onTap: () {
                 Navigator.push(context, MaterialPageRoute(builder: (_) => const FavoriteView()));
+              },
+            ),
+
+            OnlyCornerButton(
+              child: const Row(
+                children: [
+                  Text('Calendar'),
+                  SizedBox(width: 4),
+                  Icon(Icons.calendar_month_rounded)
+                ],
+              ),
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (_) => const CalendarView()));
               },
             ),
 
