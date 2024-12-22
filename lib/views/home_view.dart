@@ -1,3 +1,4 @@
+import 'package:custom_widgets/widgets/digital_clock/digital_clock_widget.dart';
 import 'package:flutter/material.dart';
 
 import 'package:custom_widgets/views/calendar_view.dart';
@@ -144,6 +145,8 @@ class _HomeViewState extends State<HomeView> {
                 AnimatedHeartButton()
               ],
             ),
+
+            const DigitalClockWidget()
 
           ]
         ),
