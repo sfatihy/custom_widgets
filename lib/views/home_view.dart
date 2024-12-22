@@ -12,6 +12,8 @@ import 'package:custom_widgets/widgets/column/custom_column_widget.dart';
 import 'package:custom_widgets/widgets/divider/custom_divider_widget.dart';
 import 'package:custom_widgets/widgets/glass_morphism/glass_morphism_widget.dart';
 import 'package:custom_widgets/widgets/price/price_widget.dart';
+import 'package:custom_widgets/widgets/heart/animated_heart_button.dart';
+import 'package:custom_widgets/widgets/heart/heart_button.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -133,6 +135,14 @@ class _HomeViewState extends State<HomeView> {
               onTap: () {
                 Navigator.push(context, MaterialPageRoute(builder: (_) => const CalendarView()));
               },
+            ),
+
+            const Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                HeartButton(),
+                AnimatedHeartButton()
+              ],
             ),
 
           ]
