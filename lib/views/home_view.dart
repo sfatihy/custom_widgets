@@ -1,8 +1,8 @@
-import 'package:custom_widgets/widgets/digital_clock/digital_clock_widget.dart';
 import 'package:flutter/material.dart';
 
 import 'package:custom_widgets/views/calendar_view.dart';
 import 'package:custom_widgets/views/favorite_view.dart';
+import 'package:custom_widgets/views/pizza_view.dart';
 import 'package:custom_widgets/views/qr_view.dart';
 
 import 'package:custom_widgets/widgets/animated_price/animated_price_widget.dart';
@@ -10,11 +10,12 @@ import 'package:custom_widgets/widgets/animated_price_wheel/animated_price_wheel
 import 'package:custom_widgets/widgets/buttons/only_corner_button.dart';
 import 'package:custom_widgets/widgets/buttons/colorful_button.dart';
 import 'package:custom_widgets/widgets/column/custom_column_widget.dart';
+import 'package:custom_widgets/widgets/digital_clock/digital_clock_widget.dart';
 import 'package:custom_widgets/widgets/divider/custom_divider_widget.dart';
 import 'package:custom_widgets/widgets/glass_morphism/glass_morphism_widget.dart';
-import 'package:custom_widgets/widgets/price/price_widget.dart';
 import 'package:custom_widgets/widgets/heart/animated_heart_button.dart';
 import 'package:custom_widgets/widgets/heart/heart_button.dart';
+import 'package:custom_widgets/widgets/price/price_widget.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -146,7 +147,20 @@ class _HomeViewState extends State<HomeView> {
               ],
             ),
 
-            const DigitalClockWidget()
+            const DigitalClockWidget(),
+
+            OnlyCornerButton(
+              child: const Row(
+                children: [
+                  Text('Pizza'),
+                  SizedBox(width: 4),
+                  Icon(Icons.local_pizza_rounded)
+                ],
+              ),
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (_) => const PizzaView()));
+              },
+            ),
 
           ]
         ),
