@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:custom_widgets/views/calendar_view.dart';
+import 'package:custom_widgets/views/credit_card_view.dart';
 import 'package:custom_widgets/views/favorite_view.dart';
 import 'package:custom_widgets/views/pizza_view.dart';
 import 'package:custom_widgets/views/qr_view.dart';
@@ -75,7 +76,7 @@ class _HomeViewState extends State<HomeView> {
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
-              overlayColor: MaterialStateProperty.all(const Color(0xFF8AECFF)),
+              overlayColor: const WidgetStatePropertyAll(Color(0xFF8AECFF)),
               child: const Text('Login'),
               onTap: () {
 
@@ -102,9 +103,9 @@ class _HomeViewState extends State<HomeView> {
 
             OnlyCornerButton(
               child: const Row(
+                spacing: 8,
                 children: [
                   Text('Circle FAB'),
-                  SizedBox(width: 4),
                   Icon(Icons.arrow_forward_outlined)
                 ],
               ),
@@ -115,9 +116,9 @@ class _HomeViewState extends State<HomeView> {
 
             OnlyCornerButton(
               child: const Row(
+                spacing: 8,
                 children: [
                   Text('Favorite FAB'),
-                  SizedBox(width: 4),
                   Icon(Icons.arrow_forward_outlined)
                 ],
               ),
@@ -128,9 +129,9 @@ class _HomeViewState extends State<HomeView> {
 
             OnlyCornerButton(
               child: const Row(
+                spacing: 8,
                 children: [
                   Text('Calendar'),
-                  SizedBox(width: 4),
                   Icon(Icons.calendar_month_rounded)
                 ],
               ),
@@ -151,14 +152,27 @@ class _HomeViewState extends State<HomeView> {
 
             OnlyCornerButton(
               child: const Row(
+                spacing: 8,
                 children: [
                   Text('Pizza'),
-                  SizedBox(width: 4),
                   Icon(Icons.local_pizza_rounded)
                 ],
               ),
               onTap: () {
                 Navigator.push(context, MaterialPageRoute(builder: (_) => const PizzaView()));
+              },
+            ),
+
+            OnlyCornerButton(
+              child: const Row(
+                spacing: 8,
+                children: [
+                  Text('Credit Card'),
+                  Icon(Icons.credit_card)
+                ],
+              ),
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (_) => const CreditCardView()));
               },
             ),
 
