@@ -11,6 +11,7 @@ import 'package:custom_widgets/widgets/animated_price_wheel/animated_price_wheel
 import 'package:custom_widgets/widgets/buttons/only_corner_button.dart';
 import 'package:custom_widgets/widgets/buttons/colorful_button.dart';
 import 'package:custom_widgets/widgets/column/custom_column_widget.dart';
+import 'package:custom_widgets/widgets/digital_clock/countdown_timer_widget.dart';
 import 'package:custom_widgets/widgets/digital_clock/digital_clock_widget.dart';
 import 'package:custom_widgets/widgets/divider/custom_divider_widget.dart';
 import 'package:custom_widgets/widgets/glass_morphism/glass_morphism_widget.dart';
@@ -149,6 +150,26 @@ class _HomeViewState extends State<HomeView> {
             ),
 
             const DigitalClockWidget(),
+
+            Builder(
+              builder: (context) {
+                final endTime = DateTime.now().add(const Duration(seconds: 65));
+                return StreamBuilder<int>(
+                  stream: Stream.periodic(const Duration(seconds: 1), (tick) {
+                    final int remaining = endTime.difference(DateTime.now()).inSeconds;
+                    return remaining > 0 ? remaining : 0;
+                  }),
+                  builder: (context, snapshot) {
+                    final int remainingSeconds = snapshot.data ?? 65;
+
+                    return CountdownTimerWidget(
+                      time: 65,
+                      remainingSeconds: remainingSeconds,
+                    );
+                  },
+                );
+              }
+            ),
 
             OnlyCornerButton(
               child: const Row(

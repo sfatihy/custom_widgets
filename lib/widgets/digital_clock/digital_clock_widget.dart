@@ -11,6 +11,8 @@ class DigitalClockWidget extends StatefulWidget {
 
 class _DigitalClockWidgetState extends State<DigitalClockWidget> {
 
+  Index index = Index();
+
   Widget colon() {
     return SizedBox(
       width: 15,
@@ -39,9 +41,6 @@ class _DigitalClockWidgetState extends State<DigitalClockWidget> {
   }
 
   Widget time (Time time) {
-
-    Index index = Index();
-
     return SizedBox(
       height: 50,
       width: 25,
@@ -92,9 +91,15 @@ class _DigitalClockWidgetState extends State<DigitalClockWidget> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<DateTime>(
-      stream: Stream.periodic(const Duration(milliseconds: 100), (count) => DateTime.now()),
+      stream: Stream.periodic(const Duration(milliseconds: 500), (count) => DateTime.now()),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
+
+          final now = snapshot.data!;
+          final hourStr = now.hour.toString().padLeft(2, '0');
+          final minuteStr = now.minute.toString().padLeft(2, '0');
+          final secondStr = now.second.toString().padLeft(2, '0');
+
           return Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
@@ -124,27 +129,27 @@ class _DigitalClockWidgetState extends State<DigitalClockWidget> {
               mainAxisSize: MainAxisSize.min,
               children: [
 
-                time(Time.time(int.parse(snapshot.data!.hour.toString().padLeft(2, '0').split('').first))),
+                time(Time.time(int.parse(hourStr[0]))),
                 const SizedBox(
                   width: 2.5,
                 ),
-                time(Time.time(int.parse(snapshot.data!.hour.toString().padLeft(2, '0').split('').last))),
+                time(Time.time(int.parse(hourStr[1]))),
 
                 colon(),
 
-                time(Time.time(int.parse(snapshot.data!.minute.toString().padLeft(2, '0').split('').first))),
+                time(Time.time(int.parse(minuteStr[0]))),
                 const SizedBox(
                   width: 2.5,
                 ),
-                time(Time.time(int.parse(snapshot.data!.minute.toString().padLeft(2, '0').split('').last))),
+                time(Time.time(int.parse(minuteStr[1]))),
 
                 colon(),
 
-                time(Time.time(int.parse(snapshot.data!.second.toString().padLeft(2, '0').split('').first))),
+                time(Time.time(int.parse(secondStr[0]))),
                 const SizedBox(
                   width: 2.5,
                 ),
-                time(Time.time(int.parse(snapshot.data!.second.toString().padLeft(2, '0').split('').last)))
+                time(Time.time(int.parse(secondStr[1])))
 
               ],
             ),
