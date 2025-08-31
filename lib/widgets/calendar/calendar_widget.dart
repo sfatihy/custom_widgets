@@ -35,19 +35,27 @@ class _CalendarWidgetState extends State<CalendarWidget> {
 
     chosenDateTime = now;
 
-    generateMonth(now);
+    generateMonth(chosenDateTime);
   }
 
   generateMonth (DateTime dateTime) {
 
-    weekCount = chosenDateTime.countOfWeek;
-
-    firstDayOfMonth = DateTime(dateTime.year, dateTime.month);
+    // Get the first and last day of the month
+    firstDayOfMonth = DateTime(dateTime.year, dateTime.month, 1);
     lastDayOfMonth = DateTime(dateTime.year, dateTime.month + 1, 0);
 
-    // Aylık Planda
-    firstDateOfMonth = firstDayOfMonth.subtract(Duration(days: firstDayOfMonth.weekday == 1 ? 0 : firstDayOfMonth.weekday - 1));
-    lastDateOfMonth = lastDayOfMonth.add(Duration(days: lastDayOfMonth.weekday == 7 ? 0 : 7 - lastDayOfMonth.weekday));
+    // Calculate the first date to show (start of calendar grid)
+    // Monday = 1, Sunday = 7, so we need to adjust accordingly
+    int firstDayWeekday = firstDayOfMonth.weekday;
+    firstDateOfMonth = firstDayOfMonth.subtract(Duration(days: firstDayWeekday - 1));
+
+    // Calculate the last date to show (end of calendar grid)
+    int lastDayWeekday = lastDayOfMonth.weekday;
+    lastDateOfMonth = lastDayOfMonth.add(Duration(days: 7 - lastDayWeekday));
+
+    // Calculate total days and weeks needed
+    int totalDays = lastDateOfMonth.difference(firstDateOfMonth).inDays + 1;
+    weekCount = (totalDays / 7).ceil();
 
     generateDateCell(firstDateOfMonth);
   }
@@ -82,9 +90,8 @@ class _CalendarWidgetState extends State<CalendarWidget> {
               icon: const Icon(Icons.arrow_back_outlined),
               onPressed: (now.month < chosenDateTime.month) || now.year < chosenDateTime.year ? () {
                 setState(() {
-                  chosenDateTime = DateTime(chosenDateTime.year, chosenDateTime.month - 1);
-
-                  generateMonth(firstDayOfMonth.subtract(const Duration(days: 1)));
+                  chosenDateTime = DateTime(chosenDateTime.year, chosenDateTime.month - 1, 1);
+                  generateMonth(chosenDateTime);
                 });
               } : null,
             ),
@@ -95,9 +102,8 @@ class _CalendarWidgetState extends State<CalendarWidget> {
               icon: const Icon(Icons.arrow_forward_outlined),
               onPressed: () {
                 setState(() {
-                  chosenDateTime = DateTime(chosenDateTime.year, chosenDateTime.month + 1);
-
-                  generateMonth(lastDayOfMonth.add(const Duration(days: 1)));
+                  chosenDateTime = DateTime(chosenDateTime.year, chosenDateTime.month + 1, 1);
+                  generateMonth(chosenDateTime);
                 });
               },
             )
@@ -148,7 +154,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                           height: MediaQuery.of(context).size.height * 0.065,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8),
-                            color: (startedDateIndex <= column * 7 + row) && ( column * 7 + row <= endDateIndex) ? Colors.blueAccent : dateList[index].dateTime.weekday > 5 ? Colors.blueAccent.withOpacity(0.25) : Colors.transparent,
+                            color: (startedDateIndex <= column * 7 + row) && ( column * 7 + row <= endDateIndex) ? Colors.blueAccent : dateList[index].dateTime.weekday > 5 ? Colors.blueAccent.withValues(alpha: 0.25) : Colors.transparent,
                           ),
                           padding: const EdgeInsets.all(4),
                           child: Column(
@@ -156,7 +162,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                               Text(
                                 '${dateList[index].dateTime.day}',
                                 style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                                  color: (startedDateIndex <= column * 7 + row) && ( column * 7 + row <= endDateIndex) ? Colors.black : dateList[index].isMorning || dateList[index].isNight ? Colors.blueAccent : dateList[index].dateTime.month != chosenDateTime.month ? Colors.black.withOpacity(0.25) : Colors.black
+                                  color: (startedDateIndex <= column * 7 + row) && ( column * 7 + row <= endDateIndex) ? Colors.black : dateList[index].isMorning || dateList[index].isNight ? Colors.blueAccent : dateList[index].dateTime.month != chosenDateTime.month ? Colors.black.withValues(alpha: 0.25) : Colors.black
                                 )
                               ),
 
@@ -164,7 +170,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                                 dateList[index].dateTime.monthName.substring(0,3),
                                 style: Theme.of(context).textTheme.labelSmall?.copyWith(
                                   fontSize: 8,
-                                  color: (startedDateIndex <= column * 7 + row) && ( column * 7 + row <= endDateIndex) ? Colors.black : dateList[index].isMorning || dateList[index].isNight ? Colors.blueAccent : dateList[index].dateTime.month != chosenDateTime.month ? Colors.black.withOpacity(0.25) : Colors.black
+                                  color: (startedDateIndex <= column * 7 + row) && ( column * 7 + row <= endDateIndex) ? Colors.black : dateList[index].isMorning || dateList[index].isNight ? Colors.blueAccent : dateList[index].dateTime.month != chosenDateTime.month ? Colors.black.withValues(alpha: 0.25) : Colors.black
                                 )
                               ),
 
@@ -206,15 +212,15 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                             PopupMenuItem(
                               value: 'date',
                               enabled: false,
-                              child: (startedDateIndex <= column * 7 + row) && (column * 7 + row <= endDateIndex) ? Text(
-                                '${now.add(Duration(days: startedDateIndex + 1)).dateTimeFormat} - ${now.add(Duration(days: endDateIndex + 1)).dateTimeFormat}',
-                                style: Theme.of(context).textTheme.bodyMedium
-                              )
-                              :
-                              Text(
-                                dateList[index].dateTime.dateTimeFormat,
-                                style: Theme.of(context).textTheme.bodyMedium
-                              )
+                              child: (startedDateIndex <= column * 7 + row) && (column * 7 + row <= endDateIndex)
+                                ? Text(
+                                  '${dateList[startedDateIndex].dateTime.dateTimeFormat} - ${dateList[endDateIndex].dateTime.dateTimeFormat}',
+                                  style: Theme.of(context).textTheme.bodyMedium
+                                )
+                                : Text(
+                                  dateList[index].dateTime.dateTimeFormat,
+                                  style: Theme.of(context).textTheme.bodyMedium
+                                )
                             ),
 
                             const PopupMenuDivider(
