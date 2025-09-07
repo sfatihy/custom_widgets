@@ -153,8 +153,8 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                           width: MediaQuery.of(context).size.width * 0.1125,
                           height: MediaQuery.of(context).size.height * 0.065,
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            color: (startedDateIndex <= column * 7 + row) && ( column * 7 + row <= endDateIndex) ? Colors.blueAccent : dateList[index].dateTime.weekday > 5 ? Colors.blueAccent.withValues(alpha: 0.25) : Colors.transparent,
+                            borderRadius: BorderRadius.circular(12),
+                            color: (startedDateIndex <= column * 7 + row) && ( column * 7 + row <= endDateIndex) ? Colors.greenAccent : dateList[index].dateTime.weekday > 5 ? Colors.black12 : Colors.transparent,
                           ),
                           padding: const EdgeInsets.all(4),
                           child: Column(
@@ -162,7 +162,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                               Text(
                                 '${dateList[index].dateTime.day}',
                                 style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                                  color: (startedDateIndex <= column * 7 + row) && ( column * 7 + row <= endDateIndex) ? Colors.black : dateList[index].isMorning || dateList[index].isNight ? Colors.blueAccent : dateList[index].dateTime.month != chosenDateTime.month ? Colors.black.withValues(alpha: 0.25) : Colors.black
+                                  color: (startedDateIndex <= column * 7 + row) && ( column * 7 + row <= endDateIndex) ? Colors.black : dateList[index].isMorning || dateList[index].isNight ? Colors.red : dateList[index].dateTime.month != chosenDateTime.month ? Colors.black.withValues(alpha: 0.25) : Colors.black
                                 )
                               ),
 
@@ -170,7 +170,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                                 dateList[index].dateTime.monthName.substring(0,3),
                                 style: Theme.of(context).textTheme.labelSmall?.copyWith(
                                   fontSize: 8,
-                                  color: (startedDateIndex <= column * 7 + row) && ( column * 7 + row <= endDateIndex) ? Colors.black : dateList[index].isMorning || dateList[index].isNight ? Colors.blueAccent : dateList[index].dateTime.month != chosenDateTime.month ? Colors.black.withValues(alpha: 0.25) : Colors.black
+                                  color: (startedDateIndex <= column * 7 + row) && ( column * 7 + row <= endDateIndex) ? Colors.black : dateList[index].isMorning || dateList[index].isNight ? Colors.red : dateList[index].dateTime.month != chosenDateTime.month ? Colors.black.withValues(alpha: 0.25) : Colors.black
                                 )
                               ),
 
@@ -183,14 +183,14 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                                   Text(
                                     'M',
                                     style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                                      color: (startedDateIndex <= column * 7 + row) && ( column * 7 + row <= endDateIndex) ? Colors.black : dateList[index].isMorning || dateList[index].isNight ? Colors.blueAccent : Colors.black
+                                      color: (startedDateIndex <= column * 7 + row) && ( column * 7 + row <= endDateIndex) ? Colors.black : dateList[index].isMorning || dateList[index].isNight ? Colors.yellow.shade800 : Colors.black
                                     ),
                                   ) : const SizedBox(),
                                   dateList[index].isNight ?
                                   Text(
                                     'N',
                                     style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                                      color: (startedDateIndex <= column * 7 + row) && ( column * 7 + row <= endDateIndex) ? Colors.black : dateList[index].isMorning || dateList[index].isNight ? Colors.blueAccent : Colors.black
+                                      color: (startedDateIndex <= column * 7 + row) && ( column * 7 + row <= endDateIndex) ? Colors.black : dateList[index].isMorning || dateList[index].isNight ? Colors.blue.shade700 : Colors.black
                                     ),
                                   ) : const SizedBox(),
                                 ],
