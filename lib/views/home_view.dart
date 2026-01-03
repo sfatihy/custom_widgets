@@ -19,6 +19,7 @@ import 'package:custom_widgets/widgets/glass_morphism/glass_morphism_widget.dart
 import 'package:custom_widgets/widgets/heart/animated_heart_button.dart';
 import 'package:custom_widgets/widgets/heart/heart_button.dart';
 import 'package:custom_widgets/widgets/price/price_widget.dart';
+import 'package:custom_widgets/widgets/text/circular_text_widget.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -102,6 +103,16 @@ class _HomeViewState extends State<HomeView> {
             ),
 
             const GlassMorphismWidget(),
+
+            const CircularText(
+              text: "Hello World Circular Text ",
+              radius: 40,
+              style: TextStyle(
+                color: Colors.blue,
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
 
             OnlyCornerButton(
               child: const Row(
