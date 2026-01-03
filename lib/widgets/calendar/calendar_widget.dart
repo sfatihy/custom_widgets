@@ -22,67 +22,34 @@ class _CalendarWidgetState extends State<CalendarWidget> {
   int endDateIndex = -1;
   late DateTime chosenDateTime;
 
-  late DateTime firstDayOfMonth;
-  late DateTime lastDayOfMonth;
-  late DateTime firstDateOfMonth;
-  late DateTime lastDateOfMonth;
-
   @override
   void initState() {
     super.initState();
-
     now = DateTime.now();
-
     chosenDateTime = now;
-
     generateMonth(chosenDateTime);
   }
 
-  generateMonth (DateTime dateTime) {
+  void generateMonth(DateTime dateTime) {
+    // Use extensions for date calculations
+    final firstDateOfGrid = dateTime.firstDateOfCalendarGrid;
+    weekCount = dateTime.countOfWeek;
 
-    // Get the first and last day of the month
-    firstDayOfMonth = DateTime(dateTime.year, dateTime.month, 1);
-    lastDayOfMonth = DateTime(dateTime.year, dateTime.month + 1, 0);
-
-    // Calculate the first date to show (start of calendar grid)
-    // Monday = 1, Sunday = 7, so we need to adjust accordingly
-    int firstDayWeekday = firstDayOfMonth.weekday;
-    firstDateOfMonth = firstDayOfMonth.subtract(Duration(days: firstDayWeekday - 1));
-
-    // Calculate the last date to show (end of calendar grid)
-    int lastDayWeekday = lastDayOfMonth.weekday;
-    lastDateOfMonth = lastDayOfMonth.add(Duration(days: 7 - lastDayWeekday));
-
-    // Calculate total days and weeks needed
-    int totalDays = lastDateOfMonth.difference(firstDateOfMonth).inDays + 1;
-    weekCount = (totalDays / 7).ceil();
-
-    generateDateCell(firstDateOfMonth);
+    generateDateCell(firstDateOfGrid);
   }
 
   // For a month
-  generateDateCell(DateTime dateTime) {
-
+  void generateDateCell(DateTime firstDateInGrid) {
     dateList.clear();
-
-    List.generate(
-      weekCount * 7,
-      (index) {
-        dateList.add(
-          DateCell(
-            dateTime: dateTime.add(Duration(days: index))
-          )
-        );
-      }
-    );
+    List.generate(weekCount * 7, (index) {
+      dateList.add(DateCell(dateTime: firstDateInGrid.add(Duration(days: index))));
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Column(
       children: [
-
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
@@ -95,9 +62,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                 });
               } : null,
             ),
-
             Text('${chosenDateTime.monthName} ${chosenDateTime.year}'),
-
             IconButton(
               icon: const Icon(Icons.arrow_forward_outlined),
               onPressed: () {
@@ -109,7 +74,6 @@ class _CalendarWidgetState extends State<CalendarWidget> {
             )
           ],
         ),
-
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: List.generate(
@@ -133,7 +97,6 @@ class _CalendarWidgetState extends State<CalendarWidget> {
             )
           ),
         ),
-
         Column(
           children: List.generate(
             weekCount,
@@ -143,7 +106,6 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                 7,
                 (row) {
                   int index = column * 7 + row;
-
                   return Padding(
                     padding: const EdgeInsets.all(1),
                     child: InkWell(
@@ -154,7 +116,11 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                           height: MediaQuery.of(context).size.height * 0.065,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(12),
-                            color: (startedDateIndex <= column * 7 + row) && ( column * 7 + row <= endDateIndex) ? Colors.greenAccent : dateList[index].dateTime.weekday > 5 ? Colors.black12 : Colors.transparent,
+                            color: (startedDateIndex <= column * 7 + row) && (column * 7 + row <= endDateIndex)
+                              ? Colors.redAccent.shade100
+                                : dateList[index].dateTime.weekday > 5
+                                  ? Colors.black12
+                                  : Colors.transparent,
                           ),
                           padding: const EdgeInsets.all(4),
                           child: Column(
@@ -162,7 +128,13 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                               Text(
                                 '${dateList[index].dateTime.day}',
                                 style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                                  color: (startedDateIndex <= column * 7 + row) && ( column * 7 + row <= endDateIndex) ? Colors.black : dateList[index].isMorning || dateList[index].isNight ? Colors.red : dateList[index].dateTime.month != chosenDateTime.month ? Colors.black.withValues(alpha: 0.25) : Colors.black
+                                  color: (startedDateIndex <= column * 7 + row) && (column * 7 + row <= endDateIndex)
+                                    ? Colors.black
+                                    : dateList[index].isMorning || dateList[index].isNight
+                                      ? Colors.red
+                                      : dateList[index].dateTime.month != chosenDateTime.month
+                                        ? Colors.black.withValues(alpha: 0.25)
+                                        : Colors.black
                                 )
                               ),
 
@@ -170,38 +142,50 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                                 dateList[index].dateTime.monthName.substring(0,3),
                                 style: Theme.of(context).textTheme.labelSmall?.copyWith(
                                   fontSize: 8,
-                                  color: (startedDateIndex <= column * 7 + row) && ( column * 7 + row <= endDateIndex) ? Colors.black : dateList[index].isMorning || dateList[index].isNight ? Colors.red : dateList[index].dateTime.month != chosenDateTime.month ? Colors.black.withValues(alpha: 0.25) : Colors.black
+                                  color: (startedDateIndex <= column * 7 + row) && (column * 7 + row <= endDateIndex)
+                                    ? Colors.black
+                                    : dateList[index].isMorning || dateList[index].isNight
+                                      ? Colors.red
+                                      : dateList[index].dateTime.month != chosenDateTime.month
+                                        ? Colors.black.withValues(alpha: 0.25)
+                                        : Colors.black
                                 )
                               ),
-
                               const Spacer(),
-
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  dateList[index].isMorning ?
-                                  Text(
-                                    'M',
-                                    style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                                      color: (startedDateIndex <= column * 7 + row) && ( column * 7 + row <= endDateIndex) ? Colors.black : dateList[index].isMorning || dateList[index].isNight ? Colors.yellow.shade800 : Colors.black
-                                    ),
-                                  ) : const SizedBox(),
-                                  dateList[index].isNight ?
-                                  Text(
-                                    'N',
-                                    style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                                      color: (startedDateIndex <= column * 7 + row) && ( column * 7 + row <= endDateIndex) ? Colors.black : dateList[index].isMorning || dateList[index].isNight ? Colors.blue.shade700 : Colors.black
-                                    ),
-                                  ) : const SizedBox(),
+                                  dateList[index].isMorning
+                                    ? Text(
+                                      'M',
+                                      style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                                        color: (startedDateIndex <= column * 7 + row) && (column * 7 + row <= endDateIndex)
+                                          ? Colors.black
+                                          : dateList[index].isMorning || dateList[index].isNight
+                                            ? Colors.yellow.shade800
+                                            : Colors.black
+                                      ),
+                                    )
+                                    : const SizedBox(),
+                                  dateList[index].isNight
+                                    ? Text(
+                                      'N',
+                                      style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                                        color: (startedDateIndex <= column * 7 + row) && (column * 7 + row <= endDateIndex)
+                                          ? Colors.black
+                                          : dateList[index].isMorning || dateList[index].isNight
+                                            ? Colors.blue.shade700
+                                            : Colors.black
+                                      ),
+                                    )
+                                    : const SizedBox(),
                                 ],
                               ),
-
                             ],
                           ),
                         ),
                       ),
                       onTapUp: (TapUpDetails tapUpDetails) async {
-
                         final double left = tapUpDetails.globalPosition.dx;
                         final double top = tapUpDetails.globalPosition.dy;
 
@@ -221,93 +205,69 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                                   dateList[index].dateTime.dateTimeFormat,
                                   style: Theme.of(context).textTheme.bodyMedium
                                 )
-                            ),
-
-                            const PopupMenuDivider(
-                              height: 1,
-                            ),
-
-                            PopupMenuItem(
-                              value: dateList[index].isMorning,
-                              enabled: false,
-                              child: StatefulBuilder(
-                                builder: (context, setState2) {
-                                  return Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        'Morning',
-                                        style: Theme.of(context).textTheme.bodyMedium
-                                      ),
-                                      Checkbox(
-                                        value: dateList[index].isMorning,
-                                        onChanged: (value) {
-                                          setState2(() {
-
-                                            if (startedDateIndex != -1 && endDateIndex != -1) {
-                                              for (int i = 0; i <= endDateIndex - startedDateIndex; i++ ) {
-                                                dateList[startedDateIndex + i].isMorning = value ?? !dateList[startedDateIndex + i].isMorning;
-                                              }
-                                            }
-                                            else {
-                                              dateList[index].isMorning = value ?? !dateList[index].isMorning;
-                                            }
-
-                                          });
-
-                                          setState(() {
-
-                                          });
-                                        },
-                                      ),
-
-                                    ],
-                                  );
-                                },
                               ),
-                            ),
-
-                            PopupMenuItem(
-                              value: dateList[index].isNight,
-                              enabled: false,
-                              child: StatefulBuilder(
-                                builder: (context, setState2) {
-                                  return Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        'Night',
-                                        style: Theme.of(context).textTheme.bodyMedium
-                                      ),
-                                      Checkbox(
-                                        value: dateList[index].isNight,
-                                        onChanged: (value) {
-                                          setState2(() {
-
-                                            if (startedDateIndex != -1 && endDateIndex != -1) {
-                                              for (int i = 0; i <= endDateIndex - startedDateIndex; i++ ) {
-                                                dateList[startedDateIndex + i].isNight = value ?? dateList[startedDateIndex + i].isNight;
-                                              }
-                                            }
-                                            else {
-                                              dateList[index].isNight = value ?? !dateList[index].isNight;
-                                            }
-
-                                          });
-
-                                          setState(() {
-
-                                          });
-                                        },
-                                      ),
-
-                                    ],
-                                  );
-                                },
+                              const PopupMenuDivider(
+                                height: 1,
                               ),
-                            ),
-                          ]
-                        );
+                              PopupMenuItem(
+                                value: dateList[index].isMorning,
+                                enabled: false,
+                                child: StatefulBuilder(
+                                  builder: (context, setState2) {
+                                    return Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text('Morning', style: Theme.of(context).textTheme.bodyMedium),
+                                        Checkbox(
+                                          value: dateList[index].isMorning,
+                                          onChanged: (value) {
+                                            setState2(() {
+                                              if (startedDateIndex != -1 && endDateIndex != -1) {
+                                                for (int i = 0; i <= endDateIndex - startedDateIndex; i++) {
+                                                  dateList[startedDateIndex + i].isMorning = value ?? !dateList[startedDateIndex + i].isMorning;
+                                                }
+                                              } else {
+                                                dateList[index].isMorning = value ?? !dateList[index].isMorning;
+                                              }
+                                            });
+                                            setState(() {});
+                                          },
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                ),
+                              ),
+                              PopupMenuItem(
+                                value: dateList[index].isNight,
+                                enabled: false,
+                                child: StatefulBuilder(
+                                  builder: (context, setState2) {
+                                    return Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text('Night', style: Theme.of(context).textTheme.bodyMedium),
+                                        Checkbox(
+                                          value: dateList[index].isNight,
+                                          onChanged: (value) {
+                                            setState2(() {
+                                              if (startedDateIndex != -1 && endDateIndex != -1) {
+                                                for (int i = 0; i <= endDateIndex - startedDateIndex; i++) {
+                                                  dateList[startedDateIndex + i].isNight = value ?? !dateList[startedDateIndex + i].isNight; // Corrected: was dateList[startedDateIndex + i].isNight on the right side
+                                                }
+                                              } else {
+                                                dateList[index].isNight = value ?? !dateList[index].isNight;
+                                              }
+                                            });
+                                            setState(() {});
+                                          },
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                ),
+                              ),
+                            ]);
 
                         if (menu == null) {
                           setState(() {
@@ -318,24 +278,19 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                       },
                       onLongPress: () {
                         setState(() {
-
                           if (startedDateIndex == -1 && endDateIndex == -1) {
                             startedDateIndex = column * 7 + row;
-                          }
-                          else if (endDateIndex == -1 && startedDateIndex != column * 7 + row) {
+                          } else if (endDateIndex == -1 && startedDateIndex != column * 7 + row) {
                             if (startedDateIndex > column * 7 + row) {
                               endDateIndex = startedDateIndex;
                               startedDateIndex = column * 7 + row;
-                            }
-                            else {
+                            } else {
                               endDateIndex = column * 7 + row;
                             }
-                          }
-                          else {
+                          } else {
                             startedDateIndex = -1;
                             endDateIndex = -1;
                           }
-
                         });
                       },
                     ),
@@ -344,8 +299,8 @@ class _CalendarWidgetState extends State<CalendarWidget> {
               ),
             ),
           )
-        ),
-      ],
+        )
+      ]
     );
   }
 }

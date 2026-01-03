@@ -1,4 +1,3 @@
-import 'package:custom_widgets/widgets/buttons/colorful_button.dart';
 import 'package:custom_widgets/widgets/buttons/only_corner_button.dart';
 import 'package:flutter/material.dart';
 
@@ -19,7 +18,7 @@ class CalendarView extends StatelessWidget {
           const CalendarWidget(),
 
           OnlyCornerButton(
-            child: const Text('Kaydet'),
+            child: const Text('Save'),
             onTap: () {
               Navigator.pop(context);
             },

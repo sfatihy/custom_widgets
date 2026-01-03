@@ -88,26 +88,33 @@ extension TimeExtension on DateTime {
     }
   }
 
+  /// The first day of the month for this DateTime.
+  DateTime get firstDayOfCurrentMonth => DateTime(year, month, 1);
+
+  /// The last day of the month for this DateTime.
+  DateTime get lastDayOfCurrentMonth => DateTime(year, month + 1, 0);
+
+  /// The first date to display in a calendar grid for this DateTime's month.
+  /// This is the Monday of the week containing the first day of the month.
+  DateTime get firstDateOfCalendarGrid {
+    final fd = DateTime(year, month, 1); // First day of current month
+    return fd.subtract(Duration(days: fd.weekday - 1));
+  }
+
+  /// The last date to display in a calendar grid for this DateTime's month.
+  /// This is the Sunday of the week containing the last day of the month.
+  DateTime get lastDateOfCalendarGrid {
+    final ld = DateTime(year, month + 1, 0); // Last day of current month
+    return ld.add(Duration(days: 7 - ld.weekday));
+  }
+
   // Calculate how many weeks are needed to display the full month in a calendar grid
   // This includes partial weeks from previous/next months
   int get countOfWeek {
-    // Get first and last day of the month
-    final firstDayOfTheMonth = DateTime(year, month, 1);
-    final lastDayOfTheMonth = DateTime(year, month + 1, 0);
+    final firstDateGrid = firstDateOfCalendarGrid;
+    final lastDateGrid = lastDateOfCalendarGrid;
 
-    // Calculate the first date to show in calendar (start of week containing first day)
-    final firstDateToShow = firstDayOfTheMonth.subtract(
-      Duration(days: firstDayOfTheMonth.weekday - 1)
-    );
-
-    // Calculate the last date to show in calendar (end of week containing last day)
-    final lastDateToShow = lastDayOfTheMonth.add(
-      Duration(days: 7 - lastDayOfTheMonth.weekday)
-    );
-
-    // Calculate total days needed and convert to weeks
-    final totalDays = lastDateToShow.difference(firstDateToShow).inDays + 1;
-
+    final totalDays = lastDateGrid.difference(firstDateGrid).inDays + 1;
     return (totalDays / 7).ceil();
   }
 }
