@@ -1,46 +1,47 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 
-class CircularTextWidget extends StatelessWidget {
+class ArcTextWidget extends StatelessWidget {
   final String text;
   final double radius;
-  final TextStyle? style;
   final double startAngle;
+  final TextStyle? style;
 
-  const CircularTextWidget({
+  const ArcTextWidget({
     super.key,
     required this.text,
     this.radius = 100,
+    this.startAngle = -pi, // starts from left to right (upper semi-circle)
     this.style,
-    this.startAngle = -pi / 2,
   });
 
   @override
   Widget build(BuildContext context) {
     return CustomPaint(
       size: Size(radius * 2, radius * 2),
-      painter: CircularTextPainter(text, radius, style, startAngle),
+      painter: ArcTextPainter(text, radius, startAngle, style),
     );
   }
 }
 
-class CircularTextPainter extends CustomPainter {
+class ArcTextPainter extends CustomPainter {
   final String text;
   final double radius;
-  final TextStyle? style;
   final double startAngle;
+  final TextStyle? style;
 
-  CircularTextPainter(this.text, this.radius, this.style, this.startAngle);
+  ArcTextPainter(this.text, this.radius, this.startAngle, this.style);
 
   @override
   void paint(Canvas canvas, Size size) {
     final center = Offset(size.width / 2, size.height / 2);
-    final anglePerChar = 2 * pi / text.length;
+    const sweep = pi;
+    final anglePerChar = sweep / (text.length - 1);
+
     final textStyle = style ?? const TextStyle(color: Colors.black, fontSize: 16);
 
     for (int i = 0; i < text.length; i++) {
-      final angle = i * anglePerChar + startAngle;
+      final angle = startAngle + i * anglePerChar;
       final offset = Offset(
         center.dx + radius * cos(angle),
         center.dy + radius * sin(angle),
@@ -55,11 +56,14 @@ class CircularTextPainter extends CustomPainter {
       canvas.save();
       canvas.translate(offset.dx, offset.dy);
       canvas.rotate(angle + pi / 2);
-      textPainter.paint(canvas, Offset(-textPainter.width / 2, -textPainter.height / 2));
+      textPainter.paint(
+        canvas,
+        Offset(-textPainter.width / 2, -textPainter.height / 2),
+      );
       canvas.restore();
     }
   }
 
   @override
-  bool shouldRepaint(CustomPainter oldDelegate) => false;
+  bool shouldRepaint(CustomPainter oldDelegate) => true;
 }

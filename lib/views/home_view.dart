@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 import 'package:custom_widgets/views/calendar_view.dart';
@@ -19,6 +21,7 @@ import 'package:custom_widgets/widgets/glass_morphism/glass_morphism_widget.dart
 import 'package:custom_widgets/widgets/heart/animated_heart_button.dart';
 import 'package:custom_widgets/widgets/heart/heart_button.dart';
 import 'package:custom_widgets/widgets/price/price_widget.dart';
+import 'package:custom_widgets/widgets/text/arc_text_widget.dart';
 import 'package:custom_widgets/widgets/text/circular_text_widget.dart';
 
 class HomeView extends StatefulWidget {
@@ -104,14 +107,28 @@ class _HomeViewState extends State<HomeView> {
 
             const GlassMorphismWidget(),
 
-            const CircularText(
-              text: "Hello World Circular Text ",
-              radius: 40,
-              style: TextStyle(
-                color: Colors.blue,
-                fontSize: 12,
-                fontWeight: FontWeight.bold,
-              ),
+            const Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ArcTextWidget(
+                  text: "Hello World Arc Text",
+                  radius: 60,
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontSize: 14,
+                  ),
+                ),
+                CircularTextWidget(
+                  text: "Hello World Circular Text ",
+                  radius: 60,
+                  startAngle: -pi * 0.9,
+                  style: TextStyle(
+                    color: Colors.blue,
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ]
             ),
 
             OnlyCornerButton(
