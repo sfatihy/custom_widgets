@@ -19,7 +19,7 @@ class InfiniteScrollViewState extends State<InfiniteScrollView> {
     super.initState();
     scrollController = ScrollController();
     scrollController.addListener(() {
-      if (scrollController.position.atEdge) {
+      if (scrollController.position.pixels >= scrollController.position.maxScrollExtent - 200) {
         if (!isFetching) {
           fetchData();
         }
@@ -37,7 +37,7 @@ class InfiniteScrollViewState extends State<InfiniteScrollView> {
     setState(() {
       isFetching = true;
     });
-    await Future.delayed(const Duration(seconds: 1));
+    await Future.delayed(const Duration(seconds: 5));
     setState(() {
       items.addAll(List.generate(10, (index) => items.length + index));
       isFetching = false;
@@ -53,7 +53,7 @@ class InfiniteScrollViewState extends State<InfiniteScrollView> {
       body: ListView.builder(
         physics: const BouncingScrollPhysics(),
         controller: scrollController,
-        padding: const EdgeInsets.only(bottom: 80.0),
+        padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
         itemCount: items.length + 1,
         itemBuilder: (context, index) {
           return index < items.length
