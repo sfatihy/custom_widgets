@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:custom_widgets/views/calendar_view.dart';
 import 'package:custom_widgets/views/credit_card_view.dart';
 import 'package:custom_widgets/views/favorite_view.dart';
+import 'package:custom_widgets/views/infinite_scroll_view.dart';
 import 'package:custom_widgets/views/pizza_view.dart';
 import 'package:custom_widgets/views/qr_view.dart';
 
@@ -194,6 +195,19 @@ class _HomeViewState extends State<HomeView> {
               ),
               onTap: () {
                 Navigator.push(context, MaterialPageRoute(builder: (_) => const CreditCardView()));
+              },
+            ),
+
+            OnlyCornerButton(
+              child: const Row(
+                spacing: 8,
+                children: [
+                  Text('Infinite Scroll'),
+                  Icon(Icons.list)
+                ],
+              ),
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (_) => const InfiniteScrollView()));
               },
             ),
 
